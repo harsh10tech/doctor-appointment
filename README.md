@@ -35,7 +35,7 @@ The base url for all API endpoints is: _`locahost:8000/`_
 * Django, Django-rest_framework
 * VS Code as a platfrom
 
-#### How to hit each 
+#### How to hit each endpoints
 1. `doctor/signup`
     ```
     {
@@ -56,7 +56,7 @@ The base url for all API endpoints is: _`locahost:8000/`_
         'password':
     }
     ```
-    returns 
+    Response
     ```
     {
         "success": "login successfull !!",
@@ -91,7 +91,7 @@ The base url for all API endpoints is: _`locahost:8000/`_
         'password':
     }
     ```
-    returns 
+    Response
     ```
     {
         "success": "login successfull !!",
@@ -106,6 +106,7 @@ The base url for all API endpoints is: _`locahost:8000/`_
     }
     ```
 7. `appointment/getdoctors`
+    Response
     ```
     {
         "doctor": {
