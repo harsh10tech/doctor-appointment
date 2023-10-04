@@ -105,22 +105,23 @@ class PatientsAppointmentDetails(viewsets.ModelViewSet):
             # print(month)
             # schedule = json.dumps(schedule)
             monthly = MonthlyScheduleDoctor.objects.filter(doctor=doctor,month=self.month_dict[self.month_num])
-            weekly = WeeklySchedule.objects.filter(monthely=monthly[0],appointment_on_week=schedule)
-            data.append({
-                'doctor':{
-                    'licence_number':doctor.licence_number,
-                    'name':doctor.name,
-                    'specialization':doctor.specialization,
-                    'description':doctor.description,
-                },
-                'schedule':{
-                    'location':schedule.location,
-                    'day':schedule.day,
-                    'start': schedule.start,
-                    'end':schedule.end
-                },
-                'appointments':{week['date'].strftime("%d-%m-%Y"):week['appointments'] for week in weekly.values('date','appointments')}
-            })
+            if monthly.exists():
+                weekly = WeeklySchedule.objects.filter(monthly=monthly[0],appointment_on_week=schedule)
+                data.append({
+                    'doctor':{
+                        'licence_number':doctor.licence_number,
+                        'name':doctor.name,
+                        'specialization':doctor.specialization,
+                        'description':doctor.description,
+                    },
+                    'schedule':{
+                        'location':schedule.location,
+                        'day':schedule.day,
+                        'start': schedule.start,
+                        'end':schedule.end
+                    },
+                    'appointments':{week['date'].strftime("%d-%m-%Y"):week['appointments'] for week in weekly.values('date','appointments')}
+                })
 
         return Response(data)
 
@@ -132,11 +133,34 @@ class PatientsAppointmentDetails(viewsets.ModelViewSet):
         date = data['date']
         DATE_FORMAT = "%d-%m-%Y"
         date = datetime.strptime(date,DATE_FORMAT).date()
-
+        print(date.month)
+        user = User.objects.get(id=request.auth.user_id)
+        patient = RegisterPatient.objects.get(user=user)
         doctor = RegisterDoctor.objects.get(licence_number=licence_number)
-        monthly = MonthlyScheduleDoctor.objects.get(doctor=doctor,month = self.month_dict[self.month_num])
-        schedule = WeeklySchedule.objects.get(monthely=monthly,date =date)
+        monthly = MonthlyScheduleDoctor.objects.get(doctor=doctor,month = self.month_dict[int(date.month)])
+        schedule = WeeklySchedule.objects.get(monthly=monthly,date =date)
+        if schedule.appointments == 0:
+            return Response("No appointment slots left, look for another day",202)
         schedule.appointments -= 1 
         schedule.save()
+        
+        patientappointment = PatientsAppointment.objects.filter(
+            patient = patient,
+            doctor = doctor,
+            date = date
+        )
 
-        return Response(schedule.appointments)
+        if patientappointment.exists():
+            data = {"appointment allready booked on":patientappointment[0].date}
+            return Response(data,202)
+        else:
+            patientappointment = PatientsAppointment.objects.create(
+                patient = patient,
+                doctor = doctor,
+                date = date
+            )
+            patientappointment.save()
+
+
+
+        return Response("Appointment Booked",202)

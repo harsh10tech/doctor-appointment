@@ -19,3 +19,8 @@ class PatientsAppointment(models.Model):
     patient = models.ForeignKey(RegisterPatient,on_delete=models.CASCADE)
     doctor = models.ForeignKey(RegisterDoctor,on_delete=models.CASCADE)
     date = models.DateField(null = False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['patient','doctor','date',],name='appointment')
+        ]
