@@ -5,6 +5,8 @@ There are 7 endpoints:
 * 3 for Doctors side
 * 4 for Patient side
 
+#### Watch the video demo [here](https://drive.google.com/file/d/1XsqvOv1S-7yjZhHjwlqHQSu--Py35LZe/view?usp=sharing)
+
 ### Features
 * Only Authenticated users can set doctors' schedules, get the list of doctors, and book an appointment.
 * Token Authentication is used for the Authorization. 
@@ -12,11 +14,12 @@ There are 7 endpoints:
 ### Installation Guide
 * Clone the repo from [here](https://github.com/harsh10tech/doctor-appointment.git).
 * Python is a must for the project, so install Python if not already there.
-* Run `env\Scripts\activate` to activate the environment.
+
 
 ### Usage
 * Run the project with `python manage.py runserver 8000`
 * Connect to the API endpoints using Postman or thunder client (VScode) on port 8000. 
+
 
 ### API Endpoints
 The base url for all API endpoints is: _`locahost:8000/`_ and [http://harshcode2020.pythonanywhere.com](http://harshcode2020.pythonanywhere.com)
