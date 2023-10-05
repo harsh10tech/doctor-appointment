@@ -19,7 +19,7 @@ There are 7 endpoints:
 * Connect to the API endpoints using Postman or thunder client (VScode) on port 8000. 
 
 ### API Endpoints
-The base url for all API endpoints is: _`locahost:8000/`_
+The base url for all API endpoints is: _`locahost:8000/`_ and [http://harshcode2020.pythonanywhere.com]http://harshcode2020.pythonanywhere.com
 
 | Sl No.| HTTP Verbs | Endpoints | Action | 
 | --- | --- | --- | --- |
@@ -70,6 +70,9 @@ The base url for all API endpoints is: _`locahost:8000/`_
         'day':
         'start':
         'end':
+        'duration':
+        'date':
+        'month':
         'appointments':
     }
     ```
